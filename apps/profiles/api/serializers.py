@@ -16,12 +16,10 @@ class UserLoginSerializer(serializers.ModelSerializer):
     group = CharField(allow_blank=False, read_only=True)
     # This is the id of the user from the Student Profile or Faculty Profile table.
     user_id = CharField(allow_blank=False, read_only=True)
-    firebase_token = CharField(allow_blank=False)
 
     class Meta:
         model = User
         fields = [
-            'firebase_token',
             'first_name',
             'username',
             'password',
@@ -35,7 +33,6 @@ class UserLoginSerializer(serializers.ModelSerializer):
         user_obj = None
         username = data.get("username")
         password = data.get("password")
-        firebase_token = data.get("firebase_token")
         if not username:
             raise ValidationError("A username is required.")
 
@@ -56,10 +53,6 @@ class UserLoginSerializer(serializers.ModelSerializer):
         group = user_obj.groups.all()[0].name.lower()
         data["group"] = group
         data["first_name"] = user_obj.first_name
-        try:
-            Notification.objects.create(user=user_obj, firebase_token=firebase_token,)
-        except:
-            raise ValidationError("The user is already registered.")
 
         if group == "student":
             data["user_id"] = StudentDetail.objects.filter(user=user)[0].id
