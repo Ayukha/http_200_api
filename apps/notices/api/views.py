@@ -59,7 +59,7 @@ def create_notice(request):
     if not user:
         response_data = {'error': 'Also add username in the header.'}
         return Response(response_data, status=status.HTTP_406_NOT_ACCEPTABLE)
-        
+
     user = User.objects.get(username=str(user))
     if user.groups.all()[0].name.lower == "student":
         response_data = {'error': 'Students are not allowed to create notice !'}
