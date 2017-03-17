@@ -17,7 +17,7 @@ def user_login(request):
     return Response(serializer.errors, status=status.HTTP_406_NOT_ACCEPTABLE)
 
 
-@api_view(['GET', 'POST',])
+@api_view(['GET', 'POST', ])
 @permission_classes((permissions.IsAuthenticated, ))
 def student_profile_data(request, user_id):
     try:
